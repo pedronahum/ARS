@@ -5,18 +5,17 @@ Aurelia Guy
 Benjamin Recht 
 '''
 
-import parser
-import time
-import os
 import numpy as np
 import gym
-import logz
-import ray
+from logz import *
+from policies import *
 import utils
 import optimizers
-from policies import *
+import logz as logz
 import socket
 from shared_noise import *
+from basic_env import BasicEnv
+from dm_control import suite
 
 @ray.remote
 class Worker(object):
@@ -25,15 +24,18 @@ class Worker(object):
     """
 
     def __init__(self, env_seed,
-                 env_name='',
+                 domain_name='',
+                 task_name='',
                  policy_params = None,
                  deltas=None,
                  rollout_length=1000,
                  delta_std=0.02):
 
         # initialize OpenAI environment for each worker
-        self.env = gym.make(env_name)
-        self.env.seed(env_seed)
+        # self.env = BasicEnv(env_name)
+        # self.env.seed(env_seed)
+        env = suite.load(domain_name=domain_name, task_name=task_name)
+        self.env = BasicEnv(env)
 
         # each worker gets access to the shared noise table
         # with independent random streams for sampling
@@ -144,7 +146,9 @@ class ARSLearner(object):
     Object class implementing the ARS algorithm.
     """
 
-    def __init__(self, env_name='HalfCheetah-v1',
+    def __init__(self,
+                 domain_name='hopper',
+                 task_name='hop',
                  policy_params=None,
                  num_workers=32, 
                  num_deltas=320, 
@@ -159,12 +163,16 @@ class ARSLearner(object):
 
         logz.configure_output_dir(logdir)
         logz.save_params(params)
-        
-        env = gym.make(env_name)
+
+        env = suite.load(domain_name=domain_name, task_name=task_name)
+        env = BasicEnv(env)
+        # env = gym.make(env_name)
         
         self.timesteps = 0
-        self.action_size = env.action_space.shape[0]
-        self.ob_size = env.observation_space.shape[0]
+        action_spec = env.action_spec()
+        self.action_size = action_spec.shape[0]
+        ob_spec = env.ob_space
+        self.ob_size = ob_spec.shape[0]
         self.num_deltas = num_deltas
         self.deltas_used = deltas_used
         self.rollout_length = rollout_length
@@ -187,7 +195,8 @@ class ARSLearner(object):
         print('Initializing workers.') 
         self.num_workers = num_workers
         self.workers = [Worker.remote(seed + 7 * i,
-                                      env_name=env_name,
+                                      domain_name=domain_name,
+                                      task_name=task_name,
                                       policy_params=policy_params,
                                       deltas=deltas_id,
                                       rollout_length=rollout_length,
@@ -266,7 +275,8 @@ class ARSLearner(object):
         if self.deltas_used > self.num_deltas:
             self.deltas_used = self.num_deltas
             
-        idx = np.arange(max_rewards.size)[max_rewards >= np.percentile(max_rewards, 100*(1 - (self.deltas_used / self.num_deltas)))]
+        idx = np.arange(max_rewards.size)[max_rewards >= np.percentile(max_rewards,
+                                                                       int(100*(1 - (self.deltas_used / self.num_deltas))))]
         deltas_idx = deltas_idx[idx]
         rollout_rewards = rollout_rewards[idx,:]
         
@@ -355,7 +365,11 @@ def run_ars(params):
     if not(os.path.exists(logdir)):
         os.makedirs(logdir)
 
-    env = gym.make(params['env_name'])
+    env = suite.load(domain_name=params['domain_name'],
+                     task_name=params['task_name'])
+
+    env = BasicEnv(env)
+    # env = gym.make(params['env_name'])
     ob_dim = env.observation_space.shape[0]
     ac_dim = env.action_space.shape[0]
 
@@ -365,7 +379,8 @@ def run_ars(params):
                    'ob_dim':ob_dim,
                    'ac_dim':ac_dim}
 
-    ARS = ARSLearner(env_name=params['env_name'],
+    ARS = ARSLearner(domain_name=params['domain_name'],
+                     task_name=params['task_name'],
                      policy_params=policy_params,
                      num_workers=params['n_workers'], 
                      num_deltas=params['n_directions'],
@@ -386,7 +401,8 @@ def run_ars(params):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--env_name', type=str, default='HalfCheetah-v1')
+    parser.add_argument('--domain_name', type=str, default='hopper')
+    parser.add_argument('--task_name', type=str, default='hop')
     parser.add_argument('--n_iter', '-n', type=int, default=1000)
     parser.add_argument('--n_directions', '-nd', type=int, default=8)
     parser.add_argument('--deltas_used', '-du', type=int, default=8)
@@ -407,7 +423,9 @@ if __name__ == '__main__':
     parser.add_argument('--filter', type=str, default='MeanStdFilter')
 
     local_ip = socket.gethostbyname(socket.gethostname())
-    ray.init(redis_address= local_ip + ':6379')
+
+    ray.init(num_cpus=8, num_gpus=1)
+    #ray.init(redis_address= local_ip + ':6379')
     
     args = parser.parse_args()
     params = vars(args)
