@@ -285,7 +285,14 @@ class ARSLearner(object):
         rollout_rewards = rollout_rewards[idx,:]
         
         # normalize rewards by their standard deviation
-        rollout_rewards /= (np.std(rollout_rewards) + np.finfo(np.float32).eps)
+        std_rewards = np.std(rollout_rewards)
+        div_factor = 1.0
+        if np.isclose(std_rewards, 0):
+            div_factor = 1.0
+        else:
+            div_factor = std_rewards
+
+        rollout_rewards /= div_factor
 
         t1 = time.time()
         # aggregate rollouts to form g_hat, the gradient used to compute SGD step
