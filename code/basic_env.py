@@ -46,14 +46,19 @@ class BasicEnv(environment.Base):
                                                size=action_spec.shape)
 
     def action_spec(self):
-        return self.action_space
+        return self._env.action_spec()
 
     def reset(self):
         time_step = self._env.reset()
         return process_observation_no_pixels(time_step.observation)
 
     def step(self, action):
-        time_step = self._env.step(action)
+        lb = self._env.action_spec().minimum
+        ub = self._env.action_spec().maximum
+        scaled_action = lb + (action + 1.) * 0.5 * (ub - lb)
+        scaled_action = np.clip(scaled_action, lb, ub)
+        # print(scaled_action)
+        time_step = self._env.step(scaled_action)
         return process_observation_no_pixels(time_step.observation), np.float32(time_step.reward), \
                time_step.last(), time_step.observation["pixels"]
 

@@ -59,7 +59,7 @@ class Worker(object):
         return self.policy.get_weights_plus_stats()
     
 
-    def rollout(self, shift = 0., rollout_length = None):
+    def rollout(self, shift = 0., rollout_length = 1000):
         """ 
         Performs one rollout of maximum length rollout_length. 
         At each time-step it substracts shift from the reward.
@@ -74,11 +74,13 @@ class Worker(object):
         ob = self.env.reset()
         for i in range(rollout_length):
             action = self.policy.act(ob)
+            # print(action)
+            # print("Shape: %s; Min %s; Max %s" % (ob.shape, np.min(ob), np.max(ob)))
             ob, reward, done, _ = self.env.step(action)
             steps += 1
             total_reward += (reward - shift)
             if done:
-                break
+                ob = self.env.reset()
             
         return total_reward, steps
 
@@ -171,8 +173,10 @@ class ARSLearner(object):
         self.timesteps = 0
         action_spec = env.action_spec()
         self.action_size = action_spec.shape[0]
+        print(self.action_size)
         ob_spec = env.ob_space
         self.ob_size = ob_spec.shape[0]
+        print(self.ob_size)
         self.num_deltas = num_deltas
         self.deltas_used = deltas_used
         self.rollout_length = rollout_length
@@ -414,7 +418,7 @@ if __name__ == '__main__':
     # for Swimmer-v1 and HalfCheetah-v1 use shift = 0
     # for Hopper-v1, Walker2d-v1, and Ant-v1 use shift = 1
     # for Humanoid-v1 used shift = 5
-    parser.add_argument('--shift', type=float, default=0)
+    parser.add_argument('--shift', type=float, default=5)
     parser.add_argument('--seed', type=int, default=237)
     parser.add_argument('--policy_type', type=str, default='linear')
     parser.add_argument('--dir_path', type=str, default='data')
