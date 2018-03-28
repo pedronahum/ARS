@@ -414,7 +414,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--domain_name', type=str, default='hopper')
     parser.add_argument('--task_name', type=str, default='hop')
-    parser.add_argument('--n_iter', '-n', type=int, default=1000)
+    parser.add_argument('--n_iter', '-n', type=int, default=5000)
     parser.add_argument('--n_directions', '-nd', type=int, default=8)
     parser.add_argument('--deltas_used', '-du', type=int, default=8)
     parser.add_argument('--step_size', '-s', type=float, default=0.02)
@@ -425,7 +425,7 @@ if __name__ == '__main__':
     # for Swimmer-v1 and HalfCheetah-v1 use shift = 0
     # for Hopper-v1, Walker2d-v1, and Ant-v1 use shift = 1
     # for Humanoid-v1 used shift = 5
-    parser.add_argument('--shift', type=float, default=5)
+    parser.add_argument('--shift', type=float, default=1)
     parser.add_argument('--seed', type=int, default=237)
     parser.add_argument('--policy_type', type=str, default='linear')
     parser.add_argument('--dir_path', type=str, default='data')
@@ -435,7 +435,7 @@ if __name__ == '__main__':
 
     local_ip = socket.gethostbyname(socket.gethostname())
 
-    ray.init(num_cpus=8, num_gpus=1)
+    ray.init(num_cpus=12, num_gpus=1)
     #ray.init(redis_address= local_ip + ':6379')
     
     args = parser.parse_args()
