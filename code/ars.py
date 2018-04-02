@@ -44,20 +44,20 @@ class Worker(object):
         self.policy_params = policy_params
         if policy_params['type'] == 'linear':
             self.policy = LinearPolicy(policy_params)
+        if policy_params['type'] == 'mlp':
+            self.policy = MlpPolicy(policy_params)
         else:
             raise NotImplementedError
             
         self.delta_std = delta_std
         self.rollout_length = rollout_length
 
-        
     def get_weights_plus_stats(self):
         """ 
         Get current policy weights and current statistics of past states.
         """
-        assert self.policy_params['type'] == 'linear'
+        assert self.policy_params['type'] == 'linear' or self.policy_params['type'] == 'mlp'
         return self.policy.get_weights_plus_stats()
-    
 
     def rollout(self, shift = 0., rollout_length = 1000):
         """ 
@@ -211,6 +211,10 @@ class ARSLearner(object):
         if policy_params['type'] == 'linear':
             self.policy = LinearPolicy(policy_params)
             self.w_policy = self.policy.get_weights()
+
+        if policy_params['type'] == 'mlp':
+            self.policy = MlpPolicy(policy_params)
+            self.w_policy = self.policy.get_weights()
         else:
             raise NotImplementedError
             
@@ -267,6 +271,7 @@ class ARSLearner(object):
         rollout_rewards = np.array(rollout_rewards, dtype = np.float64)
         
         print('Maximum reward of collected rollouts:', rollout_rewards.max())
+        print('Minimum reward of collected rollouts:', rollout_rewards.min())
         t2 = time.time()
 
         print('Time to generate rollouts:', t2 - t1)
@@ -385,10 +390,11 @@ def run_ars(params):
     ac_dim = env.action_space.shape[0]
 
     # set policy parameters. Possible filters: 'MeanStdFilter' for v2, 'NoFilter' for v1.
-    policy_params={'type':'linear',
-                   'ob_filter':params['filter'],
-                   'ob_dim':ob_dim,
-                   'ac_dim':ac_dim}
+    policy_params={'type': params['policy_type'],
+                   'ob_filter': params['filter'],
+                   'ob_dim': ob_dim,
+                   'ac_dim': ac_dim,
+                   'hid_size': params['hid_size']}
 
     ARS = ARSLearner(domain_name=params['domain_name'],
                      task_name=params['task_name'],
@@ -412,22 +418,23 @@ def run_ars(params):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--domain_name', type=str, default='hopper')
-    parser.add_argument('--task_name', type=str, default='hop')
+    parser.add_argument('--domain_name', type=str, default='walker')
+    parser.add_argument('--task_name', type=str, default='walk')
     parser.add_argument('--n_iter', '-n', type=int, default=5000)
     parser.add_argument('--n_directions', '-nd', type=int, default=8)
     parser.add_argument('--deltas_used', '-du', type=int, default=8)
     parser.add_argument('--step_size', '-s', type=float, default=0.02)
     parser.add_argument('--delta_std', '-std', type=float, default=.03)
-    parser.add_argument('--n_workers', '-e', type=int, default=18)
+    parser.add_argument('--n_workers', '-e', type=int, default=12)
     parser.add_argument('--rollout_length', '-r', type=int, default=1000)
 
     # for Swimmer-v1 and HalfCheetah-v1 use shift = 0
     # for Hopper-v1, Walker2d-v1, and Ant-v1 use shift = 1
     # for Humanoid-v1 used shift = 5
-    parser.add_argument('--shift', type=float, default=1)
+    parser.add_argument('--shift', type=float, default=0)
     parser.add_argument('--seed', type=int, default=237)
-    parser.add_argument('--policy_type', type=str, default='linear')
+    parser.add_argument('--hid_size', type=int, default=256)
+    parser.add_argument('--policy_type', type=str, default='mlp')
     parser.add_argument('--dir_path', type=str, default='data')
 
     # for ARS V1 use filter = 'NoFilter'
@@ -435,7 +442,7 @@ if __name__ == '__main__':
 
     local_ip = socket.gethostbyname(socket.gethostname())
 
-    ray.init(num_cpus=12, num_gpus=1)
+    ray.init(num_cpus=10, num_gpus=1)
     #ray.init(redis_address= local_ip + ':6379')
     
     args = parser.parse_args()
