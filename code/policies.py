@@ -9,6 +9,7 @@ Benjamin Recht
 import numpy as np
 from filter import get_filter
 
+
 class Policy(object):
 
     def __init__(self, policy_params):
@@ -18,7 +19,7 @@ class Policy(object):
         self.weights = np.empty(0)
 
         # a filter for updating statistics of the observations and normalizing inputs to the policies
-        self.observation_filter = get_filter(policy_params['ob_filter'], shape = (self.ob_dim,))
+        self.observation_filter = get_filter(policy_params['ob_filter'], shape=(self.ob_dim,))
         self.update_filter = True
         
     def update_weights(self, new_weights):
@@ -45,7 +46,7 @@ class LinearPolicy(Policy):
 
     def __init__(self, policy_params):
         Policy.__init__(self, policy_params)
-        self.weights = np.zeros((self.ac_dim, self.ob_dim), dtype = np.float64)
+        self.weights = np.zeros((self.ac_dim, self.ob_dim), dtype=np.float64)
 
     def act(self, ob):
         ob = self.observation_filter(ob, update=self.update_filter)
@@ -66,27 +67,34 @@ class MlpPolicy(Policy):
     def __init__(self, policy_params):
         Policy.__init__(self, policy_params)
         self.hidden = policy_params['hid_size']
-        self.weights = np.zeros(self.ob_dim*self.hidden + self.hidden*self.hidden
-                                + self.hidden*self.ac_dim, dtype=np.float64)
+        self.weights = np.zeros(self.ob_dim * self.hidden + self.hidden * self.hidden
+                                + self.hidden * self.ac_dim, dtype=np.float64)
 
     def act(self, ob):
         ob = self.observation_filter(ob, update=self.update_filter)
-        end_w1 = self.ob_dim*self.hidden
-        end_w2 = end_w1 + self.hidden*self.hidden
+        # Reshape the vector into matrices
+        end_w1 = self.ob_dim * self.hidden
+        end_w2 = end_w1 + self.hidden * self.hidden
         w1 = self.weights[0:end_w1].reshape(self.ob_dim, self.hidden)
         w2 = self.weights[end_w1:end_w2].reshape(self.hidden, self.hidden)
         size = self.weights.shape[0]
         w3 = self.weights[end_w2:size].reshape(self.hidden, self.ac_dim)
 
+        # Neural net layers
         layer1 = np.dot(ob, w1)
         relu_layer1 = np.maximum(layer1, 0., layer1)
+
         layer2 = np.dot(w2, relu_layer1)
         relu_layer2 = np.maximum(layer2, 0., layer2)
+
         layer3 = np.dot(relu_layer2, w3)
 
+        # Bound the predictions between -1 and 1
         return np.tanh(layer3)
 
     def get_weights_plus_stats(self):
         mu, std = self.observation_filter.get_stats()
         aux = np.asarray([self.weights, mu, std])
         return aux
+
+

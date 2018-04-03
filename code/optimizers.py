@@ -8,6 +8,7 @@ from __future__ import print_function
 import numpy as np
 
 # OPTIMIZERS FOR MINIMIZING OBJECTIVES
+
 class Optimizer(object):
     def __init__(self, w_policy):
         self.w_policy = w_policy.flatten()

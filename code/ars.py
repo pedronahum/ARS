@@ -44,7 +44,7 @@ class Worker(object):
         self.policy_params = policy_params
         if policy_params['type'] == 'linear':
             self.policy = LinearPolicy(policy_params)
-        if policy_params['type'] == 'mlp':
+        elif policy_params['type'] == 'mlp':
             self.policy = MlpPolicy(policy_params)
         else:
             raise NotImplementedError
@@ -149,8 +149,8 @@ class ARSLearner(object):
     """
 
     def __init__(self,
-                 domain_name='hopper',
-                 task_name='hop',
+                 domain_name=None,
+                 task_name=None,
                  policy_params=None,
                  num_workers=32, 
                  num_deltas=320, 
@@ -173,10 +173,10 @@ class ARSLearner(object):
         self.timesteps = 0
         action_spec = env.action_spec()
         self.action_size = action_spec.shape[0]
-        print(self.action_size)
+        # print(self.action_size)
         ob_spec = env.ob_space
         self.ob_size = ob_spec.shape[0]
-        print(self.ob_size)
+        # print(self.ob_size)
         self.num_deltas = num_deltas
         self.deltas_used = deltas_used
         self.rollout_length = rollout_length
@@ -211,8 +211,7 @@ class ARSLearner(object):
         if policy_params['type'] == 'linear':
             self.policy = LinearPolicy(policy_params)
             self.w_policy = self.policy.get_weights()
-
-        if policy_params['type'] == 'mlp':
+        elif policy_params['type'] == 'mlp':
             self.policy = MlpPolicy(policy_params)
             self.w_policy = self.policy.get_weights()
         else:
@@ -290,14 +289,7 @@ class ARSLearner(object):
         rollout_rewards = rollout_rewards[idx,:]
         
         # normalize rewards by their standard deviation
-        std_rewards = np.std(rollout_rewards)
-        div_factor = 1.0
-        if np.isclose(std_rewards, 0):
-            div_factor = 1.0
-        else:
-            div_factor = std_rewards
-
-        rollout_rewards /= div_factor
+        # rollout_rewards /= (np.std(rollout_rewards) + 1e-8)
 
         t1 = time.time()
         # aggregate rollouts to form g_hat, the gradient used to compute SGD step
@@ -408,7 +400,7 @@ def run_ars(params):
                      rollout_length=params['rollout_length'],
                      shift=params['shift'],
                      params=params,
-                     seed = params['seed'])
+                     seed=params['seed'])
         
     ARS.train(params['n_iter'])
        
@@ -420,12 +412,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--domain_name', type=str, default='walker')
     parser.add_argument('--task_name', type=str, default='walk')
-    parser.add_argument('--n_iter', '-n', type=int, default=5000)
+    parser.add_argument('--n_iter', '-n', type=int, default=1000)
     parser.add_argument('--n_directions', '-nd', type=int, default=8)
     parser.add_argument('--deltas_used', '-du', type=int, default=8)
     parser.add_argument('--step_size', '-s', type=float, default=0.02)
-    parser.add_argument('--delta_std', '-std', type=float, default=.03)
-    parser.add_argument('--n_workers', '-e', type=int, default=12)
+    parser.add_argument('--delta_std', '-std', type=float, default=0.03)
+    parser.add_argument('--n_workers', '-e', type=int, default=10)
     parser.add_argument('--rollout_length', '-r', type=int, default=1000)
 
     # for Swimmer-v1 and HalfCheetah-v1 use shift = 0
@@ -433,11 +425,14 @@ if __name__ == '__main__':
     # for Humanoid-v1 used shift = 5
     parser.add_argument('--shift', type=float, default=0)
     parser.add_argument('--seed', type=int, default=237)
-    parser.add_argument('--hid_size', type=int, default=256)
-    parser.add_argument('--policy_type', type=str, default='mlp')
+    parser.add_argument('--hid_size', type=int, default=64)
+
+    # for ARS V1 / V2 use policy_type = "linear"
+    parser.add_argument('--policy_type', type=str, default='linear')
     parser.add_argument('--dir_path', type=str, default='data')
 
     # for ARS V1 use filter = 'NoFilter'
+    # for ARS V2 use filter = 'MeanStdFilter'
     parser.add_argument('--filter', type=str, default='MeanStdFilter')
 
     local_ip = socket.gethostbyname(socket.gethostname())
