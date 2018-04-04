@@ -70,8 +70,13 @@ class MlpPolicy(Policy):
         self.weights = np.zeros(self.ob_dim * self.hidden + self.hidden * self.hidden
                                 + self.hidden * self.ac_dim, dtype=np.float64)
 
+        # a filter for updating statistics of the observations and normalizing inputs to the policies
+        self.observation_filter = get_filter(policy_params['ob_filter'], shape=(self.hidden,))
+        self.observation_filter2 = get_filter(policy_params['ob_filter'], shape=(self.hidden,))
+
     def act(self, ob):
-        ob = self.observation_filter(ob, update=self.update_filter)
+
+        # ob = self.observation_filter(ob, update=self.update_filter)
         # Reshape the vector into matrices
         end_w1 = self.ob_dim * self.hidden
         end_w2 = end_w1 + self.hidden * self.hidden
@@ -81,12 +86,20 @@ class MlpPolicy(Policy):
         w3 = self.weights[end_w2:size].reshape(self.hidden, self.ac_dim)
 
         # Neural net layers
+        # Layer 1
         layer1 = np.dot(ob, w1)
+        # Apply filter
+        layer1 = self.observation_filter(layer1, update=self.update_filter)
+        # Relu
         relu_layer1 = np.maximum(layer1, 0., layer1)
 
+        # Layer 2
         layer2 = np.dot(w2, relu_layer1)
+        # Apply filter # 2
+        layer2 = self.observation_filter2(layer2, update=self.update_filter)
         relu_layer2 = np.maximum(layer2, 0., layer2)
 
+        # Layer 3
         layer3 = np.dot(relu_layer2, w3)
 
         # Bound the predictions between -1 and 1
@@ -94,7 +107,8 @@ class MlpPolicy(Policy):
 
     def get_weights_plus_stats(self):
         mu, std = self.observation_filter.get_stats()
-        aux = np.asarray([self.weights, mu, std])
+        mu2, std2 = self.observation_filter2.get_stats()
+        aux = np.asarray([self.weights, mu, std, mu2, std2])
         return aux
 
 

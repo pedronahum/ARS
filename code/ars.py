@@ -132,14 +132,25 @@ class Worker(object):
         self.policy.observation_filter.stats_increment()
         return
 
+    def stats_increment2(self):
+        self.policy.observation_filter2.stats_increment()
+        return
+
     def get_weights(self):
         return self.policy.get_weights()
     
     def get_filter(self):
         return self.policy.observation_filter
 
+    def get_filter2(self):
+        return self.policy.observation_filter2
+
     def sync_filter(self, other):
         self.policy.observation_filter.sync(other)
+        return
+
+    def sync_filter2(self, other):
+        self.policy.observation_filter2.sync(other)
         return
 
     
@@ -187,6 +198,7 @@ class ARSLearner(object):
         self.params = params
         self.max_past_avg_reward = float('-inf')
         self.num_episodes_used = float('inf')
+        self.policy_params = policy_params
 
         
         # create shared table for storing noise
@@ -345,19 +357,38 @@ class ARSLearner(object):
             # get statistics from all workers
             for j in range(self.num_workers):
                 self.policy.observation_filter.update(ray.get(self.workers[j].get_filter.remote()))
+                if self.policy_params['type'] == 'mlp':
+                    self.policy.observation_filter2.update(ray.get(self.workers[j].get_filter2.remote()))
+
             self.policy.observation_filter.stats_increment()
+            if self.policy_params['type'] == 'mlp':
+                self.policy.observation_filter2.stats_increment()
 
             # make sure master filter buffer is clear
             self.policy.observation_filter.clear_buffer()
+            if self.policy_params['type'] == 'mlp':
+                self.policy.observation_filter2.clear_buffer()
             # sync all workers
             filter_id = ray.put(self.policy.observation_filter)
             setting_filters_ids = [worker.sync_filter.remote(filter_id) for worker in self.workers]
             # waiting for sync of all workers
             ray.get(setting_filters_ids)
-         
+
             increment_filters_ids = [worker.stats_increment.remote() for worker in self.workers]
             # waiting for increment of all workers
-            ray.get(increment_filters_ids)            
+            ray.get(increment_filters_ids)
+
+            if self.policy_params['type'] == 'mlp':
+                # sync all workers
+                filter_id = ray.put(self.policy.observation_filter2)
+                setting_filters_ids = [worker.sync_filter2.remote(filter_id) for worker in self.workers]
+                # waiting for sync of all workers
+                ray.get(setting_filters_ids)
+
+                increment_filters_ids = [worker.stats_increment2.remote() for worker in self.workers]
+                # waiting for increment of all workers
+                ray.get(increment_filters_ids)
+
             t2 = time.time()
             print('Time to sync statistics:', t2 - t1)
                         
