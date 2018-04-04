@@ -32,7 +32,7 @@ def process_observation_no_pixels(observation):
 class BasicEnv(environment.Base):
 
     def __init__(self, env):
-        self._env = pixels.Wrapper(env, pixels_only=False)
+        self._env = pixels.Wrapper(env, pixels_only=False, render_kwargs={'camera_id': 0})
         action_spec = self._env.action_spec()
         time_step = self._env.reset()
         observation_dm = time_step.observation

@@ -17,7 +17,7 @@ def main():
     # parser.add_argument('expert_policy_file', type=str)
     # parser.add_argument('envname', type=str)
     # parser.add_argument('--render', action='store_true')
-    parser.add_argument('--num_rollouts', type=int, default=2,
+    parser.add_argument('--num_rollouts', type=int, default=1,
                         help='Number of expert rollouts')
     parser.add_argument('--domain_name', type=str, default='walker')
     parser.add_argument('--task_name', type=str, default='walk')
