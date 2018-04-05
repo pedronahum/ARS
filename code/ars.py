@@ -469,7 +469,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--domain_name', type=str, default='walker')
     parser.add_argument('--task_name', type=str, default='walk')
-    parser.add_argument('--n_iter', '-n', type=int, default=1000)
+    parser.add_argument('--n_iter', '-n', type=int, default=3000)
     parser.add_argument('--n_directions', '-nd', type=int, default=8)
     parser.add_argument('--deltas_used', '-du', type=int, default=8)
     parser.add_argument('--step_size', '-s', type=float, default=0.02)
@@ -486,7 +486,7 @@ if __name__ == '__main__':
     # for ARS V1 / V2 use policy_type = "linear"
     parser.add_argument('--policy_type', type=str, default='linear')
     # Only used when policy_type = "mlp"
-    parser.add_argument('--hid_size', type=int, default=8)
+    parser.add_argument('--hid_size', type=int, default=64)
     parser.add_argument('--activation', type=str, default='tahn')
 
     parser.add_argument('--dir_path', type=str, default='data')

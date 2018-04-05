@@ -1,4 +1,5 @@
 This fork is an extension of [ARS](https://github.com/modestyachts/ARS) for [The DeepMind Control Suite and Package](https://github.com/deepmind/dm_control)
+for both linear and non-linear policies
 
 # Augmented Random Search (ARS)
 
@@ -36,6 +37,6 @@ python code/ars.py
 To render a trained policy, execute a command of the following form:
 
 ```
-python code/run_policy.py
+python code/run_ars_policy.py
 ```
 Please note that movie-py is needed to build the gif
