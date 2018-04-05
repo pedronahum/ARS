@@ -312,8 +312,7 @@ class ARSLearner(object):
         rollout_rewards = rollout_rewards[idx,:]
         
         # normalize rewards by their standard deviation
-        if self.policy_params['type'] == 'linear':
-            rollout_rewards /= (np.std(rollout_rewards) + 1e-8)
+        rollout_rewards /= (np.std(rollout_rewards) + 1e-8)
 
         t1 = time.time()
         # aggregate rollouts to form g_hat, the gradient used to compute SGD step
@@ -483,11 +482,13 @@ if __name__ == '__main__':
     # for Humanoid-v1 used shift = 5
     parser.add_argument('--shift', type=float, default=0)
     parser.add_argument('--seed', type=int, default=237)
-    parser.add_argument('--hid_size', type=int, default=64)
-    parser.add_argument('--activation', type=str, default='tahn')
 
     # for ARS V1 / V2 use policy_type = "linear"
     parser.add_argument('--policy_type', type=str, default='linear')
+    # Only used when policy_type = "mlp"
+    parser.add_argument('--hid_size', type=int, default=8)
+    parser.add_argument('--activation', type=str, default='tahn')
+
     parser.add_argument('--dir_path', type=str, default='data')
 
     # for ARS V1 use filter = 'NoFilter'

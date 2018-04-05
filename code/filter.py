@@ -27,6 +27,9 @@ class Filter(object):
         """Copies all state from other filter to self."""
         raise NotImplementedError
 
+    def set_parameters(self, other, *args, **kwargs):
+        raise NotImplementedError
+
 
 class NoFilter(Filter):
     def __init__(self, *args):
@@ -52,6 +55,9 @@ class NoFilter(Filter):
 
     def get_stats(self):
         return 0, 1
+
+    def set_parameters(self, other, *args, **kwargs):
+        pass
 
     @property
     def mean(self):
@@ -193,6 +199,11 @@ class MeanStdFilter(Filter):
         self.destd = other.destd
         self.rs = other.rs.copy()
         self.buffer = other.buffer.copy()
+        return
+
+    def set_parameters(self, mean, std):
+        self.mean = mean
+        self.std = std
         return
 
     def __call__(self, x, update=True):
