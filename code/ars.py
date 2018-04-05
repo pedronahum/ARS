@@ -132,18 +132,29 @@ class Worker(object):
         self.policy.observation_filter.stats_increment()
         return
 
+    def stats_increment0(self):
+        self.policy.observation_filter0.stats_increment()
+        return
+
     def stats_increment2(self):
         self.policy.observation_filter2.stats_increment()
         return
 
     def get_weights(self):
         return self.policy.get_weights()
-    
+
+    def get_filter0(self):
+        return self.policy.observation_filter0
+
     def get_filter(self):
         return self.policy.observation_filter
 
     def get_filter2(self):
         return self.policy.observation_filter2
+
+    def sync_filter0(self, other):
+        self.policy.observation_filter0.sync(other)
+        return
 
     def sync_filter(self, other):
         self.policy.observation_filter.sync(other)
@@ -301,7 +312,8 @@ class ARSLearner(object):
         rollout_rewards = rollout_rewards[idx,:]
         
         # normalize rewards by their standard deviation
-        rollout_rewards /= (np.std(rollout_rewards) + 1e-8)
+        if self.policy_params['type'] == 'linear':
+            rollout_rewards /= (np.std(rollout_rewards) + 1e-8)
 
         t1 = time.time()
         # aggregate rollouts to form g_hat, the gradient used to compute SGD step
@@ -358,16 +370,20 @@ class ARSLearner(object):
             for j in range(self.num_workers):
                 self.policy.observation_filter.update(ray.get(self.workers[j].get_filter.remote()))
                 if self.policy_params['type'] == 'mlp':
+                    self.policy.observation_filter0.update(ray.get(self.workers[j].get_filter0.remote()))
                     self.policy.observation_filter2.update(ray.get(self.workers[j].get_filter2.remote()))
 
             self.policy.observation_filter.stats_increment()
             if self.policy_params['type'] == 'mlp':
+                self.policy.observation_filter0.stats_increment()
                 self.policy.observation_filter2.stats_increment()
 
             # make sure master filter buffer is clear
             self.policy.observation_filter.clear_buffer()
             if self.policy_params['type'] == 'mlp':
+                self.policy.observation_filter0.clear_buffer()
                 self.policy.observation_filter2.clear_buffer()
+
             # sync all workers
             filter_id = ray.put(self.policy.observation_filter)
             setting_filters_ids = [worker.sync_filter.remote(filter_id) for worker in self.workers]
@@ -379,6 +395,16 @@ class ARSLearner(object):
             ray.get(increment_filters_ids)
 
             if self.policy_params['type'] == 'mlp':
+                # sync all workers
+                filter_id = ray.put(self.policy.observation_filter0)
+                setting_filters_ids = [worker.sync_filter0.remote(filter_id) for worker in self.workers]
+                # waiting for sync of all workers
+                ray.get(setting_filters_ids)
+
+                increment_filters_ids = [worker.stats_increment0.remote() for worker in self.workers]
+                # waiting for increment of all workers
+                ray.get(increment_filters_ids)
+
                 # sync all workers
                 filter_id = ray.put(self.policy.observation_filter2)
                 setting_filters_ids = [worker.sync_filter2.remote(filter_id) for worker in self.workers]
@@ -417,7 +443,8 @@ def run_ars(params):
                    'ob_filter': params['filter'],
                    'ob_dim': ob_dim,
                    'ac_dim': ac_dim,
-                   'hid_size': params['hid_size']}
+                   'hid_size': params['hid_size'],
+                   'activation': params['activation']}
 
     ARS = ARSLearner(domain_name=params['domain_name'],
                      task_name=params['task_name'],
@@ -457,6 +484,7 @@ if __name__ == '__main__':
     parser.add_argument('--shift', type=float, default=0)
     parser.add_argument('--seed', type=int, default=237)
     parser.add_argument('--hid_size', type=int, default=64)
+    parser.add_argument('--activation', type=str, default='tahn')
 
     # for ARS V1 / V2 use policy_type = "linear"
     parser.add_argument('--policy_type', type=str, default='linear')

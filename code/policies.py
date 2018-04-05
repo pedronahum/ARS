@@ -71,8 +71,10 @@ class MlpPolicy(Policy):
                                 + self.hidden * self.ac_dim, dtype=np.float64)
 
         # a filter for updating statistics of the observations and normalizing inputs to the policies
+        self.observation_filter0 = get_filter(policy_params['ob_filter'], shape=(self.ob_dim,))
         self.observation_filter = get_filter(policy_params['ob_filter'], shape=(self.hidden,))
         self.observation_filter2 = get_filter(policy_params['ob_filter'], shape=(self.hidden,))
+        self.activation_function = policy_params['activation']
 
     def act(self, ob):
 
@@ -85,30 +87,43 @@ class MlpPolicy(Policy):
         size = self.weights.shape[0]
         w3 = self.weights[end_w2:size].reshape(self.hidden, self.ac_dim)
 
+        post_layer1 = None
+        post_layer2 = None
+
         # Neural net layers
         # Layer 1
+        # Apply filter
+        ob = self.observation_filter0(ob, update=self.update_filter)
         layer1 = np.dot(ob, w1)
         # Apply filter
         layer1 = self.observation_filter(layer1, update=self.update_filter)
-        # Relu
-        relu_layer1 = np.maximum(layer1, 0., layer1)
+        # Relu / Tanh
+        if self.activation_function == "relu":
+            post_layer1 = np.maximum(layer1, 0., layer1)
+        else:
+            post_layer1 = np.tanh(layer1)
 
         # Layer 2
-        layer2 = np.dot(w2, relu_layer1)
+        layer2 = np.dot(w2, post_layer1)
         # Apply filter # 2
         layer2 = self.observation_filter2(layer2, update=self.update_filter)
-        relu_layer2 = np.maximum(layer2, 0., layer2)
+        # Relu / Tanh
+        if self.activation_function == "relu":
+            post_layer2 = np.maximum(layer2, 0., layer2)
+        else:
+            post_layer2 = np.tanh(layer2)
 
         # Layer 3
-        layer3 = np.dot(relu_layer2, w3)
+        layer3 = np.dot(post_layer2, w3)
 
         # Bound the predictions between -1 and 1
         return np.tanh(layer3)
 
     def get_weights_plus_stats(self):
+        mu0, std0 = self.observation_filter0.get_stats()
         mu, std = self.observation_filter.get_stats()
         mu2, std2 = self.observation_filter2.get_stats()
-        aux = np.asarray([self.weights, mu, std, mu2, std2])
+        aux = np.asarray([self.weights, mu0, std0, mu, std, mu2, std2])
         return aux
 
 
