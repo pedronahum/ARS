@@ -1,5 +1,12 @@
-This fork is an extension of [ARS](https://github.com/modestyachts/ARS) for [The DeepMind Control Suite and Package](https://github.com/deepmind/dm_control)
-for both linear and non-linear policies.
+This fork is an extension of [ARS](https://github.com/modestyachts/ARS) for [The DeepMind Control Suite and Package](https://github.com/deepmind/dm_control).
+
+Implemented policies:
+* linear: no changes to the linear policy from [ARS](https://github.com/modestyachts/ARS).
+* mlp: mlp policy with layer normalization.
+* linear-ensemble: linear policies are combined through a weighted sum (a la bagging)
+* linear-residual-policy: A "leader" policy plus additional helper policies (work in progress...)
+
+
 
 # Augmented Random Search (ARS)
 

@@ -46,6 +46,10 @@ class Worker(object):
             self.policy = LinearPolicy(policy_params)
         elif policy_params['type'] == 'mlp':
             self.policy = MlpPolicy(policy_params)
+        elif policy_params['type'] == 'linear-ensemble':
+            self.policy = LinearEnsemblePolicy(policy_params)
+        elif policy_params['type'] == 'linear-residual-ensemble':
+            self.policy = LinearResidualEnsemblePolicy(policy_params)
         else:
             raise NotImplementedError
             
@@ -238,6 +242,9 @@ class ARSLearner(object):
             self.w_policy = self.policy.get_weights()
         elif policy_params['type'] == 'linear-ensemble':
             self.policy = LinearEnsemblePolicy(policy_params)
+            self.w_policy = self.policy.get_weights()
+        elif policy_params['type'] == 'linear-residual-ensemble':
+            self.policy = LinearResidualEnsemblePolicy(policy_params)
             self.w_policy = self.policy.get_weights()
         else:
             raise NotImplementedError
@@ -472,7 +479,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--domain_name', type=str, default='walker')
     parser.add_argument('--task_name', type=str, default='walk')
-    parser.add_argument('--n_iter', '-n', type=int, default=5000)
+    parser.add_argument('--n_iter', '-n', type=int, default=2000)
     parser.add_argument('--n_directions', '-nd', type=int, default=8)
     parser.add_argument('--deltas_used', '-du', type=int, default=8)
     parser.add_argument('--step_size', '-s', type=float, default=0.02)
@@ -493,7 +500,7 @@ if __name__ == '__main__':
     parser.add_argument('--activation', type=str, default='relu')
 
     # Only used when policy_type = "linear-ensemble"
-    parser.add_argument('--ensemble_size', type=int, default=64)
+    parser.add_argument('--ensemble_size', type=int, default=3)
 
     parser.add_argument('--dir_path', type=str, default='data')
 

@@ -47,6 +47,7 @@ def main():
     policy = None
     optimized_policy = np.load(npz_location)
 
+    # TODO: Clean this huge if-else rule!!!
     if policy_params['policy_type'] == 'linear':
 
         policy_params_final = {'type': policy_params['policy_type'],
@@ -88,6 +89,29 @@ def main():
 
         # Ensure we load the mean and std to the policy
         policy = LinearEnsemblePolicy(policy_params_final)
+        policy.update_filter = False
+        policy.observation_filter.set_parameters(mean, std)
+        policy.update_weights(M)
+
+    elif policy_params['policy_type'] == 'linear-residual-ensemble':
+
+        policy_params_final = {'type': policy_params['policy_type'],
+                               'ob_filter': policy_params['filter'],
+                               'ob_dim': ob_dim,
+                               'ac_dim': ac_dim,
+                               'ensemble_size': policy_params['ensemble_size']}
+
+        optimized_policy = optimized_policy.items()[0][1]
+        M = optimized_policy[0]
+
+        # mean and std of state vectors estimated online by ARS.
+        mean = optimized_policy[1]
+        std = optimized_policy[2]
+        # print("Mean: ", mean)
+        # print("Std: ", std)
+
+        # Ensure we load the mean and std to the policy
+        policy = LinearResidualEnsemblePolicy(policy_params_final)
         policy.update_filter = False
         policy.observation_filter.set_parameters(mean, std)
         policy.update_weights(M)

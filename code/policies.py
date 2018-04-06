@@ -74,13 +74,49 @@ class LinearEnsemblePolicy(Policy):
 
         ob = self.observation_filter(ob, update=self.update_filter)
         start = 0
-        end = 0
-        forecast = None
+        end = self.ac_dim*self.ob_dim
+        forecast = np.zeros(self.ac_dim)
         for i in range(self.size):
-            end += start + self.ac_dim*self.ob_dim
             weights_t = self.weights[start:end].reshape(self.ob_dim, self.ac_dim)
             forecast += self.allocation*np.dot(ob, weights_t)
             start = end
+            end += self.ac_dim * self.ob_dim
+        return forecast
+
+    def get_weights_plus_stats(self):
+        mu, std = self.observation_filter.get_stats()
+        aux = np.asarray([self.weights, mu, std])
+        return aux
+
+
+class LinearResidualEnsemblePolicy(Policy):
+    """
+    Linear Residual Ensemble policy class that computes action as <w, ob>.
+    """
+
+    def __init__(self, policy_params):
+        Policy.__init__(self, policy_params)
+        self.size = policy_params['ensemble_size']
+        self.allocation = 0.05
+        self.weights = np.zeros(self.ac_dim*self.ob_dim + self.size*self.ac_dim*self.ob_dim, dtype=np.float64)
+
+    def act(self, ob):
+
+        ob = self.observation_filter(ob, update=self.update_filter)
+        # Initial F(x)
+        start = 0
+        end = self.ac_dim*self.ob_dim
+        forecast = np.zeros(self.ac_dim)
+        weights_t = self.weights[start:end].reshape(self.ob_dim, self.ac_dim)
+        forecast += self.allocation * np.dot(ob, weights_t)
+        start = end
+        end += self.ac_dim * self.ob_dim
+        # Start the "residual" policies F(x) = f(x) + Sum(learning*g(x))
+        for i in range(self.size):
+            weights_t = self.weights[start:end].reshape(self.ob_dim, self.ac_dim)
+            forecast += self.allocation*np.dot(ob, weights_t)
+            start = end
+            end += self.ac_dim * self.ob_dim
         return forecast
 
     def get_weights_plus_stats(self):
