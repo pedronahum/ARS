@@ -1,5 +1,6 @@
 This fork is an extension of [ARS](https://github.com/modestyachts/ARS) for [The DeepMind Control Suite and Package](https://github.com/deepmind/dm_control)
-for both linear and non-linear policies
+for both linear and non-linear policies.
+
 
 # Augmented Random Search (ARS)
 

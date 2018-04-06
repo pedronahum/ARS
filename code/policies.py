@@ -59,9 +59,38 @@ class LinearPolicy(Policy):
         return aux
 
 
+class LinearEnsemblePolicy(Policy):
+    """
+    Linear Ensemble policy class that computes action as <w, ob>.
+    """
+
+    def __init__(self, policy_params):
+        Policy.__init__(self, policy_params)
+        self.size = policy_params['ensemble_size']
+        self.allocation = 1./self.size
+        self.weights = np.zeros(self.size*self.ac_dim*self.ob_dim, dtype=np.float64)
+
+    def act(self, ob):
+
+        ob = self.observation_filter(ob, update=self.update_filter)
+        start = 0
+        end = 0
+        forecast = None
+        for i in range(self.size):
+            end += start + self.ac_dim*self.ob_dim
+            weights_t = self.weights[start:end].reshape(self.ob_dim, self.ac_dim)
+            forecast += self.allocation*np.dot(ob, weights_t)
+            start = end
+        return forecast
+
+    def get_weights_plus_stats(self):
+        mu, std = self.observation_filter.get_stats()
+        aux = np.asarray([self.weights, mu, std])
+        return aux
+
 class MlpPolicy(Policy):
     """
-    Linear policy class that computes action as <w, ob>.
+    Non-Linear policy class that computes action as <w, ob>.
     """
 
     def __init__(self, policy_params):
