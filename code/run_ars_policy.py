@@ -23,7 +23,7 @@ def main():
     parser.add_argument('--num_rollouts', type=int, default=1,
                         help='Number of expert rollouts')
 
-    parser.add_argument('--policy_type', type=str, default='mlp')
+    parser.add_argument('--policy_type', type=str, default='linear-ensemble')
     parser.add_argument('--domain_name', type=str, default='walker')
     parser.add_argument('--task_name', type=str, default='walk')
     args = parser.parse_args()
@@ -70,6 +70,27 @@ def main():
         policy.observation_filter.set_parameters(mean, std)
         policy.update_weights(M)
 
+    elif policy_params['policy_type'] == 'snp':
+
+        policy_params_final = {'type': policy_params['policy_type'],
+                               'ob_filter': policy_params['filter'],
+                               'ob_dim': ob_dim,
+                               'ac_dim': ac_dim}
+
+        optimized_policy = optimized_policy.items()[0][1]
+        M = optimized_policy[0]
+
+        # mean and std of state vectors estimated online by ARS.
+        mean = optimized_policy[1]
+        std = optimized_policy[2]
+        # print("Mean: ", mean)
+        # print("Std: ", std)
+
+        # Ensure we load the mean and std to the policy
+        policy = SNPPolicy(policy_params_final)
+        policy.update_filter = False
+        policy.observation_filter.set_parameters(mean, std)
+        policy.update_weights(M)
     elif policy_params['policy_type'] == 'linear-ensemble':
 
         policy_params_final = {'type': policy_params['policy_type'],

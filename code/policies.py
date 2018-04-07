@@ -59,6 +59,111 @@ class LinearPolicy(Policy):
         return aux
 
 
+class SNPPolicy(Policy):
+    """
+    SNP policy class that computes action as <w, ob>.
+    """
+
+    def __init__(self, policy_params):
+        Policy.__init__(self, policy_params)
+        # Adding an additional row to cope with the max operator
+        self.weights = np.zeros((self.ac_dim, self.ob_dim + 2), dtype=np.float64)
+        self.observation_filter = get_filter(policy_params['ob_filter'], shape=(self.ob_dim + 2,))
+
+    def act(self, ob):
+        ob = np.append(ob, [np.max(ob), 1.0])
+        ob = self.observation_filter(ob, update=self.update_filter)
+        return np.tanh(np.dot(self.weights, ob))
+
+    def get_weights_plus_stats(self):
+        mu, std = self.observation_filter.get_stats()
+        aux = np.asarray([self.weights, mu, std])
+        return aux
+
+
+class LeNNPolicy(Policy):
+    """
+    Legendre policy class that computes action as <w, ob>.
+    """
+
+    def __init__(self, policy_params):
+        Policy.__init__(self, policy_params)
+        # Adding an additional row to cope with the max operator
+        self.weights = np.zeros((self.ac_dim, self.ob_dim*3), dtype=np.float64)
+        self.observation_filter = get_filter(policy_params['ob_filter'], shape=(self.ob_dim*3,))
+
+    def act(self, ob):
+        ob = np.append(ob, [self.L2(ob), self.L3(ob)])
+        ob = self.observation_filter(ob, update=self.update_filter)
+        return np.tanh(np.dot(self.weights, ob))
+
+    def get_weights_plus_stats(self):
+        mu, std = self.observation_filter.get_stats()
+        aux = np.asarray([self.weights, mu, std])
+        return aux
+
+    def L2(self, x):
+        return (3.*np.power(x, 2) - 1.)/2.
+
+    def L3(self, x):
+        return (5.*np.power(x, 3) - 3.0*x)/2.
+
+
+class LinearSNPPlusPolicy(Policy):
+    """
+    Linear policy class that computes action as <w, ob>.
+    """
+
+    def __init__(self, policy_params):
+        Policy.__init__(self, policy_params)
+        # Adding an additional elements
+        self.weights = np.zeros((self.ac_dim, self.ob_dim + 7), dtype=np.float64)
+        self.observation_filter = get_filter(policy_params['ob_filter'], shape=(self.ob_dim + 7,))
+
+    def act(self, ob):
+        ob = np.append(ob, [np.min(ob), np.percentile(ob, 10), np.percentile(ob, 25), np.percentile(ob, 50),
+                            np.percentile(ob, 75), np.percentile(ob, 90),  np.max(ob)])
+        ob = self.observation_filter(ob, update=self.update_filter)
+        return np.dot(self.weights, ob)
+
+    def get_weights_plus_stats(self):
+        mu, std = self.observation_filter.get_stats()
+        aux = np.asarray([self.weights, mu, std])
+        return aux
+
+class PolynomialPolicy(Policy):
+    """
+    Polynomial policy class that computes action as <w, ob>.
+    """
+
+    def __init__(self, policy_params):
+        Policy.__init__(self, policy_params)
+        self.degree = policy_params['degree']
+        self.weights = np.zeros(self.degree*self.ac_dim*self.ob_dim + self.ac_dim, dtype=np.float64)
+
+    def act(self, ob):
+        ob = self.observation_filter(ob, update=self.update_filter)
+        start = 0
+        end = self.ac_dim
+        # alpha component
+        forecast = self.weights[start:end]
+        start = end
+        end += self.ac_dim*self.ob_dim
+        for i in range(self.degree):
+            weights_t = self.weights[start:end].reshape(self.ob_dim, self.ac_dim)
+            ob_t = np.power(ob, i+1)
+            forecast += np.dot(ob_t, weights_t)
+            start = end
+            end += self.ac_dim * self.ob_dim
+        # Ensure results are within -1 and 1
+        return np.tanh(forecast)
+
+    def get_weights_plus_stats(self):
+        mu, std = self.observation_filter.get_stats()
+        aux = np.asarray([self.weights, mu, std])
+        return aux
+
+
 class LinearEnsemblePolicy(Policy):
     """
     Linear Ensemble policy class that computes action as <w, ob>.

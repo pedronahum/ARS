@@ -44,12 +44,20 @@ class Worker(object):
         self.policy_params = policy_params
         if policy_params['type'] == 'linear':
             self.policy = LinearPolicy(policy_params)
+        elif policy_params['type'] == 'snp':
+            self.policy = SNPPolicy(policy_params)
+        elif policy_params['type'] == 'lenn':
+            self.policy = LeNNPolicy(policy_params)
+        elif policy_params['type'] == 'snp-plus':
+            self.policy = LinearSNPPlusPolicy(policy_params)
         elif policy_params['type'] == 'mlp':
             self.policy = MlpPolicy(policy_params)
         elif policy_params['type'] == 'linear-ensemble':
             self.policy = LinearEnsemblePolicy(policy_params)
         elif policy_params['type'] == 'linear-residual-ensemble':
             self.policy = LinearResidualEnsemblePolicy(policy_params)
+        elif policy_params['type'] == 'polynomial':
+            self.policy = PolynomialPolicy(policy_params)
         else:
             raise NotImplementedError
             
@@ -60,7 +68,12 @@ class Worker(object):
         """ 
         Get current policy weights and current statistics of past states.
         """
-        assert self.policy_params['type'] == 'linear' or self.policy_params['type'] == 'mlp' or self.policy_params['type'] == 'linear-ensemble'
+        assert self.policy_params['type'] == 'linear' or \
+               self.policy_params['type'] == 'mlp' or \
+               self.policy_params['type'] == 'lenn' or \
+               self.policy_params['type'] == 'linear-ensemble' or \
+               self.policy_params['type'] == 'polynomial' or \
+               self.policy_params['type'] == 'snp' or self.policy_params['type'] == 'snp-plus'
         return self.policy.get_weights_plus_stats()
 
     def rollout(self, shift = 0., rollout_length = 1000):
@@ -237,6 +250,15 @@ class ARSLearner(object):
         if policy_params['type'] == 'linear':
             self.policy = LinearPolicy(policy_params)
             self.w_policy = self.policy.get_weights()
+        elif policy_params['type'] == 'snp':
+            self.policy = SNPPolicy(policy_params)
+            self.w_policy = self.policy.get_weights()
+        elif policy_params['type'] == 'lenn':
+            self.policy = LeNNPolicy(policy_params)
+            self.w_policy = self.policy.get_weights()
+        elif policy_params['type'] == 'snp-plus':
+            self.policy = LinearSNPPlusPolicy(policy_params)
+            self.w_policy = self.policy.get_weights()
         elif policy_params['type'] == 'mlp':
             self.policy = MlpPolicy(policy_params)
             self.w_policy = self.policy.get_weights()
@@ -245,6 +267,9 @@ class ARSLearner(object):
             self.w_policy = self.policy.get_weights()
         elif policy_params['type'] == 'linear-residual-ensemble':
             self.policy = LinearResidualEnsemblePolicy(policy_params)
+            self.w_policy = self.policy.get_weights()
+        elif policy_params['type'] == 'polynomial':
+            self.policy = PolynomialPolicy(policy_params)
             self.w_policy = self.policy.get_weights()
         else:
             raise NotImplementedError
@@ -453,7 +478,8 @@ def run_ars(params):
                    'ac_dim': ac_dim,
                    'hid_size': params['hid_size'],
                    'activation': params['activation'],
-                   'ensemble_size': params['ensemble_size']}
+                   'ensemble_size': params['ensemble_size'],
+                   'degree': params['degree']}
 
     ARS = ARSLearner(domain_name=params['domain_name'],
                      task_name=params['task_name'],
@@ -479,7 +505,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--domain_name', type=str, default='walker')
     parser.add_argument('--task_name', type=str, default='walk')
-    parser.add_argument('--n_iter', '-n', type=int, default=2000)
+    parser.add_argument('--n_iter', '-n', type=int, default=5000)
     parser.add_argument('--n_directions', '-nd', type=int, default=8)
     parser.add_argument('--deltas_used', '-du', type=int, default=8)
     parser.add_argument('--step_size', '-s', type=float, default=0.02)
@@ -501,6 +527,9 @@ if __name__ == '__main__':
 
     # Only used when policy_type = "linear-ensemble"
     parser.add_argument('--ensemble_size', type=int, default=3)
+
+    # Only used when policy_type = "polynomial"
+    parser.add_argument('--degree', type=int, default=2)
 
     parser.add_argument('--dir_path', type=str, default='data')
 

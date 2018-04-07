@@ -2,6 +2,12 @@ This fork is an extension of [ARS](https://github.com/modestyachts/ARS) for [The
 
 Implemented policies:
 * linear: no changes to the linear policy from [ARS](https://github.com/modestyachts/ARS).
+* snp: Policy that increases the input dimension with a max operator [SNP](https://www.hindawi.com/journals/cin/2014/746376/)
+* mlp: mlp policy with layer normalization.
+
+Work-in-progress:
+* lenn: policy that increases the input dimension with Legendre polynomials
+* polynomial: A polynomial policy with input normalization.
 * mlp: mlp policy with layer normalization.
 * linear-ensemble: linear policies are combined through a weighted sum (a la bagging)
 * linear-residual-policy: A "leader" policy plus additional helper policies (work in progress...)
