@@ -8,7 +8,6 @@ Implemented policies:
 Work-in-progress:
 * lenn: policy that increases the input dimension with Legendre polynomials
 * polynomial: A polynomial policy with input normalization.
-* mlp: mlp policy with layer normalization.
 * linear-ensemble: linear policies are combined through a weighted sum (a la bagging)
 * linear-residual-policy: A "leader" policy plus additional helper policies (work in progress...)
 
