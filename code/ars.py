@@ -52,6 +52,8 @@ class Worker(object):
             self.policy = LinearSNPPlusPolicy(policy_params)
         elif policy_params['type'] == 'mlp':
             self.policy = MlpPolicy(policy_params)
+        elif policy_params['type'] == 'mlp-max':
+            self.policy = MlpPolicyMax(policy_params)
         elif policy_params['type'] == 'linear-ensemble':
             self.policy = LinearEnsemblePolicy(policy_params)
         elif policy_params['type'] == 'linear-residual-ensemble':
@@ -70,6 +72,7 @@ class Worker(object):
         """
         assert self.policy_params['type'] == 'linear' or \
                self.policy_params['type'] == 'mlp' or \
+               self.policy_params['type'] == 'mlp-max' or \
                self.policy_params['type'] == 'lenn' or \
                self.policy_params['type'] == 'linear-ensemble' or \
                self.policy_params['type'] == 'polynomial' or \
@@ -261,6 +264,9 @@ class ARSLearner(object):
             self.w_policy = self.policy.get_weights()
         elif policy_params['type'] == 'mlp':
             self.policy = MlpPolicy(policy_params)
+            self.w_policy = self.policy.get_weights()
+        elif policy_params['type'] == 'mlp-max':
+            self.policy = MlpPolicyMax(policy_params)
             self.w_policy = self.policy.get_weights()
         elif policy_params['type'] == 'linear-ensemble':
             self.policy = LinearEnsemblePolicy(policy_params)
@@ -505,13 +511,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--domain_name', type=str, default='walker')
     parser.add_argument('--task_name', type=str, default='walk')
-    parser.add_argument('--n_iter', '-n', type=int, default=5000)
+    parser.add_argument('--n_iter', '-n', type=int, default=3000)
     parser.add_argument('--n_directions', '-nd', type=int, default=8)
     parser.add_argument('--deltas_used', '-du', type=int, default=8)
     parser.add_argument('--step_size', '-s', type=float, default=0.02)
     parser.add_argument('--delta_std', '-std', type=float, default=0.03)
     parser.add_argument('--n_workers', '-e', type=int, default=10)
-    parser.add_argument('--rollout_length', '-r', type=int, default=1000)
+    parser.add_argument('--rollout_length', '-r', type=int, default=100)
 
     # for Swimmer-v1 and HalfCheetah-v1 use shift = 0
     # for Hopper-v1, Walker2d-v1, and Ant-v1 use shift = 1

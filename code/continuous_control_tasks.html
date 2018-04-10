@@ -11778,8 +11778,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Conventional wisdom has been that methods based on random search in the parameter space of policies are not very efficient for reinforcement learning problems.</p>
-<p>The methodology from <a href="https://arxiv.org/abs/1803.07055">"Augmented Random Search"</a> opens the possibility to use simple functions (or policies) for continuous control problems.</p>
+<p>Reinforcement learning algorithms can generally be divided into two categories: model-free, which learn a policy or value function, and model-based, which learn a dynamics model. In both categories, conventional wisdom has been that methods based on random search in the parameter space of policies are not very efficient for reinforcement learning problems.</p>
+<p>The methodology from <a href="https://arxiv.org/abs/1803.07055">"Augmented Random Search"</a> opens the possibility to use simple policies for continuous control problems.</p>
 <p>In this fork, several policies have been created as a starting point for interested developers or researchers. Moreover, given that DeepMind recently released thier control suite for continuous problems, a simple wrapper was also created to build policies on top of thier control suite.</p>
 <p>To follow along, you will first need to install <a href="https://www.roboti.us/index.html">"Mujoco Pro v1.50"</a>. Then make sure you install <a href="https://github.com/deepmind/dm_control">"dm_control"</a>.</p>
 <p><a href="https://github.com/ray-project/ray">"Ray"</a> and <a href="http://ray.readthedocs.io/en/latest/rllib.html">"Ray RLib"</a> are used to speed up the training process.</p>
@@ -11800,7 +11800,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -11813,12 +11813,36 @@ div#notebook {
 <span class="kn">from</span> <span class="nn">basic_env</span> <span class="k">import</span> <span class="n">BasicEnv</span>
 <span class="kn">from</span> <span class="nn">moviepy.editor</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">moviepy.video.io.bindings</span> <span class="k">import</span> <span class="n">mplfig_to_npimage</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">Math</span>
+<span class="kn">import</span> <span class="nn">seaborn</span>
+<span class="n">seaborn</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="s2">&quot;talk&quot;</span><span class="p">)</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
 </pre></div>
 
 </div>
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Table-of-Contents">Table of Contents<a class="anchor-link" href="#Table-of-Contents">&#182;</a></h2><ul>
+<li><a href="#Background">Background</a></li>
+<li><a href="#The-DeepMind-Control-Suite">The DeepMind Control Suite</a><ul>
+<li><a href="#The-Walker-domain">The Walker domain</a><ul>
+<li><a href="#Basic-RL-steps">Basic RL steps</a></li>
+<li><a href="#Random-play">Random play</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -11834,7 +11858,86 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The DeepMind Control Suite and Task provides a set of benchmarks for evaluating and comparing learning algorithms for continuous control problems.</p>
+<p>Reinforcement Learning is an area of machine leanring that tries to understand how agents should take actions in an environment to maximize potential rewards.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c">%%latex</span>
+<span class="k">\begin</span><span class="nb">{</span>equation<span class="nb">}</span>
+R<span class="nb">_</span>t = <span class="k">\mathbb</span><span class="nb">{</span>E<span class="nb">}</span>[r|<span class="k">\pi</span>] = r<span class="nb">_</span>t + <span class="k">\gamma</span> r<span class="nb">_{</span>t+1<span class="nb">}</span> + <span class="k">\gamma</span><span class="nb">^</span>2 r<span class="nb">_{</span>t+2<span class="nb">}^</span>2 + ... = <span class="k">\sum\limits</span><span class="nb">_{</span>i=0<span class="nb">}^</span><span class="k">\infty</span> <span class="k">\gamma</span><span class="nb">^</span>i r<span class="nb">_{</span>t+i<span class="nb">}</span>
+<span class="k">\end</span><span class="nb">{</span>equation<span class="nb">}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+<div class="prompt"></div>
+
+
+
+<div class="output_latex output_subarea ">
+\begin{equation}
+R_t = \mathbb{E}[r|\pi] = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2}^2 + ... = \sum\limits_{i=0}^\infty \gamma^i r_{t+i}
+\end{equation}
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c">%%latex</span>
+with <span class="s">$</span><span class="nv">\pi</span><span class="s">$</span> as the policy and the discount factor <span class="s">$</span><span class="nv">\gamma</span><span class="nb"> </span><span class="nv">\in</span><span class="nb"> </span><span class="o">[</span><span class="m">0</span><span class="nb">, </span><span class="m">1</span><span class="o">]</span><span class="s">$</span>.
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+<div class="prompt"></div>
+
+
+
+<div class="output_latex output_subarea ">
+with $\pi$ as the policy and the discount factor $\gamma \in [0, 1]$.
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The agent uses the policy to choose which action it is going to play or select next. Neural networks are powerful function approximators and
+are used either directly as policy functions, taking a state as input and outputting a probability distribution over the action set; or as value estimators, by outputting a scalar which estimates the value of states and actions related to the estimated achievable discounted reward from those states.</p>
 
 </div>
 </div>
@@ -11844,7 +11947,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="DM-Control-Domain-and-Tasks">DM Control Domain and Tasks<a class="anchor-link" href="#DM-Control-Domain-and-Tasks">&#182;</a></h2>
+<p>Recent research, however, suggest that linear policies may produce similar impressive results in reinforcement learning. We will test both linear and non-linear policies in this repository.</p>
+
 </div>
 </div>
 </div>
@@ -11853,7 +11957,36 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Walker-Domain">Walker Domain<a class="anchor-link" href="#Walker-Domain">&#182;</a></h3>
+<p>In this fork, we use the recently released environment from DeepMind, dm_control.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="The-DeepMind-Control-Suite">The DeepMind Control Suite<a class="anchor-link" href="#The-DeepMind-Control-Suite">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The DeepMind Control Suite (aka dm_control) provides a set of benchmarks for evaluating and comparing learning algorithms for continuous control problems.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="The-Walker-domain">The Walker domain<a class="anchor-link" href="#The-Walker-domain">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -11869,7 +12002,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">suite</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;walker&#39;</span><span class="p">,</span><span class="s1">&#39;walk&#39;</span><span class="p">,</span> <span class="n">visualize_reward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -11882,7 +12015,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Action space:&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">action_spec</span><span class="p">())</span>
@@ -11914,14 +12047,14 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>For the environment mentioned above, the action is a vector of (bounded) reals of size 6. Thus, any function could be use to represent the policy as long as the output of is consistent with the action space.</p>
+<p>For the environment mentioned above, the action is a vector of size 6. Thus, any function could be use to represent the policy as long as the output of is consistent with the action space.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">time_step</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
@@ -11940,9 +12073,9 @@ div#notebook {
 <div class="prompt"></div>
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Observation space: OrderedDict([(&#39;orientations&#39;, array([-0.40370384,  0.91488972,  0.91759742,  0.39751097,  0.20414347,
-        0.97894098, -0.02272519,  0.99974175, -0.30266771,  0.95309614,
-       -0.80039722, -0.59947001, -0.21454812, -0.97671342])), (&#39;height&#39;, 1.3), (&#39;velocity&#39;, array([0., 0., 0., 0., 0., 0., 0., 0., 0.]))])
+<pre>Observation space: OrderedDict([(&#39;orientations&#39;, array([ 0.2119793 ,  0.97727416,  0.55981976,  0.8286144 , -0.99867414,
+        0.05147782, -0.94457806,  0.3282869 ,  0.98538494,  0.17034234,
+        0.66171801,  0.74975281, -0.03210231,  0.99948459])), (&#39;height&#39;, 1.3), (&#39;velocity&#39;, array([0., 0., 0., 0., 0., 0., 0., 0., 0.]))])
 </pre>
 </div>
 </div>
@@ -11966,6 +12099,72 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Basic-RL-steps">Basic RL steps<a class="anchor-link" href="#Basic-RL-steps">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The following code demostrates how to run a single episode with a random agent, and compute the reward. As we run 1000 steps, the maximum possible score is 1000.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As basic as this code block looks, it summarizes pretty nicely the steps of any RL algorithm: Given the observations or state that the environment provides, the RL algorithm needs to be able to find a strategy to maximime the total reward.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">spec</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_spec</span><span class="p">()</span>
+<span class="n">time_step</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">total_reward</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">minimum</span><span class="p">,</span><span class="n">spec</span><span class="o">.</span><span class="n">maximum</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">time_step</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    <span class="n">total_reward</span> <span class="o">+=</span> <span class="n">time_step</span><span class="o">.</span><span class="n">reward</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total reward after 1000 time steps is:&quot;</span><span class="p">,</span> <span class="n">total_reward</span><span class="p">)</span>
+    
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+<div class="prompt"></div>
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Total reward after 1000 time steps is: 27.032620006151284
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Random-play">Random play<a class="anchor-link" href="#Random-play">&#182;</a></h4>
 </div>
 </div>
@@ -11975,7 +12174,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>As much as we would like to jump into complicated policies, sometimes it is a good idea to check the behavior of random agents. The code below uses a plain vanilla random policy that takes, believe or not, random actions.</p>
+<p>As much as we would like to jump into complicated policies, sometimes it is a good idea to check the behavior of random agents. The code below uses once again a plain-vanilla random policy. This time we run 100 rollouts as a way to obtain a distribution of total rewards.</p>
 
 </div>
 </div>
@@ -12216,7 +12415,7 @@ J8NCktTJsJAkdTIsJEmdDAtJUifDQpLU6f8DOcdKcNHFiycAAAAASUVORK5CYII=
     <span class="n">im</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">video</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
     <span class="n">ims</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">im</span><span class="p">])</span>
 
-<span class="n">anim</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">ArtistAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ims</span><span class="p">,</span> <span class="n">interval</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">anim</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">ArtistAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ims</span><span class="p">,</span> <span class="n">interval</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 <span class="n">HTML</span><span class="p">(</span><span class="n">anim</span><span class="o">.</span><span class="n">to_html5_video</span><span class="p">())</span>
 </pre></div>
 
@@ -20853,6 +21052,36 @@ wCn3//0zIPfLgS84uR8Hfs5tvwv4LHAa+AMgdNsr7vNp9/1dU75WvgP48CzJPOh/ntE4xxxzdGHa
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>How can we estimate a policy for this domain?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Linear-policies">Linear policies<a class="anchor-link" href="#Linear-policies">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's stick to the walker-walk domian for the time being. Besides making random decisions, what would be the easiest approach to produce a decision? If you studied studied statistics, probably you are thinking about linear regression methods. And you are not that far away.</p>
+<p>Before taking a decision, the agent will observe a vector of 24 elements.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
