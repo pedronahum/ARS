@@ -11776,7 +11776,7 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Reinforcement learning algorithms can generally be divided into two categories: model-free, which learn a policy or value function, and model-based, which learn a dynamics model. In both categories, conventional wisdom has been that methods based on random search in the parameter space of policies are not very efficient for reinforcement learning problems.</p>
-<p>The methodology from <a href="https://arxiv.org/abs/1803.07055">"Augmented Random Search"</a> opens the possibility to use simple policies for continuous control problems.</p>
+<p>The methodology from <a href="https://arxiv.org/abs/1803.07055">"Augmented Random Search"</a> opens up the possibility to use simple policies for continuous control problems.</p>
 <p>In this fork, several policies have been created as a starting point for interested developers or researchers. Moreover, given that DeepMind recently released thier control suite for continuous problems, a simple wrapper was also created to build policies on top of thier control suite.</p>
 <p>To follow along, you will first need to install <a href="https://www.roboti.us/index.html">"Mujoco Pro v1.50"</a>. Then make sure you install <a href="https://github.com/deepmind/dm_control">"dm_control"</a>.</p>
 <p><a href="https://github.com/ray-project/ray">"Ray"</a> and <a href="http://ray.readthedocs.io/en/latest/rllib.html">"Ray RLib"</a> are used to speed up the training process.</p>
@@ -11852,7 +11852,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Reinforcement Learning is an area of machine leanring that tries to understand how agents should take actions in an environment to maximize potential rewards.</p>
+<p>Reinforcement learning is an area of machine learning that tries to understand how agents should take actions in an environment to maximize potential rewards.</p>
 
 </div>
 </div>
@@ -11943,7 +11943,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Recent research, however, suggest that linear policies may produce similar impressive results in reinforcement learning. We will test both linear and non-linear policies in this repository.</p>
+<p>Recent research, however, suggests that linear policies may produce similar impressive results in reinforcement learning. We will test both linear and non-linear policies in this repository.</p>
 
 </div>
 </div>
@@ -12039,7 +12039,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>For the environment mentioned above, the action is a vector of size 6. Thus, any function could be use to represent the policy as long as the output of is consistent with the action space.</p>
+<p>For the environment mentioned above, the action is a vector of size 6. Thus, any function could be used to represent the policy as long as the output is consistent with the action space.</p>
 
 </div>
 </div>
@@ -12367,7 +12367,7 @@ J8NCktTJsJAkdTIsJEmdDAtJUifDQpLU6f8DOcdKcNHFiycAAAAASUVORK5CYII=
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The max reward per rollout is by design 1000, yet the random agent cannot obtain more than 50. This illustrate the complexity of the optimization problem.</p>
+<p>The max reward per rollout is by design 1000, yet the random agent cannot obtain more than 50. This illustrates the complexity of the optimization problem.</p>
 
 </div>
 </div>
@@ -21068,7 +21068,7 @@ wCn3//0zIPfLgS84uR8Hfs5tvwv4LHAa+AMgdNsr7vNp9/1dU75WvgP48CzJPOh/ntE4xxxzdGHa
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Let's stick to the walker-walk domian for the time being. We just saw the impact of taking random actions.</p>
+<p>Let's stick to the walker-walk domain for the time being. We just saw the impact of taking random actions.</p>
 <p>Somehow, we need to take into account the state of the environment (ie, the observations) in order to take an "informed" action or decision. After all, we are after some sort of intelligent behavior.</p>
 
 </div>
@@ -21129,7 +21129,7 @@ wCn3//0zIPfLgS84uR8Hfs5tvwv4LHAa+AMgdNsr7vNp9/1dU75WvgP48CzJPOh/ntE4xxxzdGHa
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Lets create a function to flatten the observations now as we will use it going forward.</p>
+<p>Let's create a function to flatten the observations now as we will use it going forward.</p>
 
 </div>
 </div>
@@ -21189,7 +21189,7 @@ wCn3//0zIPfLgS84uR8Hfs5tvwv4LHAa+AMgdNsr7vNp9/1dU75WvgP48CzJPOh/ntE4xxxzdGHa
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Now we only need to understand how to modify the initial weights in order to increase the rewards of the agent.</p>
-<p>Lets define a rollout function.</p>
+<p>Let's define a rollout function.</p>
 
 </div>
 </div>
@@ -21257,7 +21257,7 @@ wCn3//0zIPfLgS84uR8Hfs5tvwv4LHAa+AMgdNsr7vNp9/1dU75WvgP48CzJPOh/ntE4xxxzdGHa
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>If we start with zero weights, we could shock these weights with noise. Lets try it out:</p>
+<p>If we start with zero weights, we could shock these weights with noise. Let's try it out:</p>
 
 </div>
 </div>
@@ -21309,7 +21309,7 @@ Rewards with a negative shock:  31.764229222161347
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The parameters of linear policy can be estimated using a simple update step:</p>
+<p>The parameters of a linear policy can be estimated using a simple update step:</p>
 
 </div>
 </div>
@@ -21501,7 +21501,7 @@ Iteration 5: Reward 49.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Still interested? Have then a look at ARS.py, run_ars_policy.py, and policies.py. These files leverage Ray and RLib to estimate many type of policies leveraging all the available computing power.</p>
+<p>Still interested? Then have a look at ARS.py, run_ars_policy.py, and policies.py. These files leverage Ray and RLib to estimate many type of policies leveraging all the available computing power.</p>
 
 </div>
 </div>
