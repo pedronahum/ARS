@@ -11726,9 +11726,7 @@ body {
 div#notebook {
   overflow: visible;
   border-top: none;
-}
-
-@media print {
+}@media print {
   div.cell {
     display: block;
     page-break-inside: avoid;
@@ -11749,7 +11747,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -11773,8 +11771,7 @@ div#notebook {
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11789,8 +11786,7 @@ div#notebook {
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11800,7 +11796,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -11824,8 +11820,7 @@ div#notebook {
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11839,13 +11834,13 @@ div#notebook {
 </li>
 </ul>
 </li>
+<li><a href="#Linear-policies">Linear Policies</a></li>
 </ul>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11853,8 +11848,7 @@ div#notebook {
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11865,7 +11859,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c">%%latex</span>
@@ -11883,7 +11877,9 @@ R<span class="nb">_</span>t = <span class="k">\mathbb</span><span class="nb">{</
 
 
 <div class="output_area">
+
 <div class="prompt"></div>
+
 
 
 
@@ -11901,7 +11897,7 @@ R_t = \mathbb{E}[r|\pi] = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2}^2 + ... = \sum
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c">%%latex</span>
@@ -11917,7 +11913,9 @@ with <span class="s">$</span><span class="nv">\pi</span><span class="s">$</span>
 
 
 <div class="output_area">
+
 <div class="prompt"></div>
+
 
 
 
@@ -11931,8 +11929,7 @@ with $\pi$ as the policy and the discount factor $\gamma \in [0, 1]$.
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11942,8 +11939,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11952,8 +11948,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11962,8 +11957,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11971,8 +11965,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11981,8 +11974,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11990,8 +11982,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12002,7 +11993,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">suite</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;walker&#39;</span><span class="p">,</span><span class="s1">&#39;walk&#39;</span><span class="p">,</span> <span class="n">visualize_reward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -12015,7 +12006,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Action space:&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">action_spec</span><span class="p">())</span>
@@ -12030,7 +12021,9 @@ are used either directly as policy functions, taking a state as input and output
 
 
 <div class="output_area">
+
 <div class="prompt"></div>
+
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Action space: BoundedArraySpec(shape=(6,), dtype=dtype(&#39;float64&#39;), name=None, minimum=[-1. -1. -1. -1. -1. -1.], maximum=[1. 1. 1. 1. 1. 1.])
@@ -12042,8 +12035,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12054,7 +12046,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">time_step</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
@@ -12070,12 +12062,14 @@ are used either directly as policy functions, taking a state as input and output
 
 
 <div class="output_area">
+
 <div class="prompt"></div>
 
+
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Observation space: OrderedDict([(&#39;orientations&#39;, array([ 0.2119793 ,  0.97727416,  0.55981976,  0.8286144 , -0.99867414,
-        0.05147782, -0.94457806,  0.3282869 ,  0.98538494,  0.17034234,
-        0.66171801,  0.74975281, -0.03210231,  0.99948459])), (&#39;height&#39;, 1.3), (&#39;velocity&#39;, array([0., 0., 0., 0., 0., 0., 0., 0., 0.]))])
+<pre>Observation space: OrderedDict([(&#39;orientations&#39;, array([-0.32438406,  0.94592546,  0.44794237,  0.89406243,  0.25360413,
+        0.96730809,  0.04759251,  0.99886683, -0.28646093,  0.95809192,
+       -0.99998084, -0.00618975, -0.85123174, -0.52478998])), (&#39;height&#39;, 1.3), (&#39;velocity&#39;, array([0., 0., 0., 0., 0., 0., 0., 0., 0.]))])
 </pre>
 </div>
 </div>
@@ -12084,8 +12078,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12094,8 +12087,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12103,8 +12095,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12113,8 +12104,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12148,10 +12138,12 @@ are used either directly as policy functions, taking a state as input and output
 
 
 <div class="output_area">
+
 <div class="prompt"></div>
 
+
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Total reward after 1000 time steps is: 27.032620006151284
+<pre>Total reward after 1000 time steps is: 29.9514277539404
 </pre>
 </div>
 </div>
@@ -12160,8 +12152,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12169,8 +12160,7 @@ are used either directly as policy functions, taking a state as input and output
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12236,7 +12226,9 @@ are used either directly as policy functions, taking a state as input and output
 
 
 <div class="output_area">
+
 <div class="prompt"></div>
+
 
 
 
@@ -12371,8 +12363,7 @@ J8NCktTJsJAkdTIsJEmdDAtJUifDQpLU6f8DOcdKcNHFiycAAAAASUVORK5CYII=
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12381,19 +12372,18 @@ J8NCktTJsJAkdTIsJEmdDAtJUifDQpLU6f8DOcdKcNHFiycAAAAASUVORK5CYII=
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Given the "video" array created above, we can visualize the agent for several episodes. Below is an annimation of the random agent.</p>
+<p>Given the "video" array created above, we can visualize the agent for several episodes. Below is an animation of the random agent.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[98]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">HTML</span>
@@ -12428,7 +12418,9 @@ J8NCktTJsJAkdTIsJEmdDAtJUifDQpLU6f8DOcdKcNHFiycAAAAASUVORK5CYII=
 
 
 <div class="output_area">
+
 <div class="prompt output_prompt">Out[101]:</div>
+
 
 
 <div class="output_html rendered_html output_subarea output_execute_result">
@@ -20523,7 +20515,9 @@ LWlsc3QAAAAlqXRvbwAAAB1kYXRhAAAAAQAAAABMYXZmNTcuODMuMTAw
 </div>
 
 <div class="output_area">
+
 <div class="prompt"></div>
+
 
 
 
@@ -21053,8 +21047,7 @@ wCn3//0zIPfLgS84uR8Hfs5tvwv4LHAa+AMgdNsr7vNp9/1dU75WvgP48CzJPOh/ntE4xxxzdGHa
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -21063,8 +21056,7 @@ wCn3//0zIPfLgS84uR8Hfs5tvwv4LHAa+AMgdNsr7vNp9/1dU75WvgP48CzJPOh/ntE4xxxzdGHa
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -21072,23 +21064,402 @@ wCn3//0zIPfLgS84uR8Hfs5tvwv4LHAa+AMgdNsr7vNp9/1dU75WvgP48CzJPOh/ntE4xxxzdGHa
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Let's stick to the walker-walk domian for the time being. Besides making random decisions, what would be the easiest approach to produce a decision? If you studied studied statistics, probably you are thinking about linear regression methods. And you are not that far away.</p>
-<p>Before taking a decision, the agent will observe a vector of 24 elements.</p>
+<p>Let's stick to the walker-walk domian for the time being. We just saw the impact of taking random actions.</p>
+<p>Somehow, we need to take into account the state of the environment (ie, the observations) in order to take an "informed" action or decision. After all, we are after some sort of intelligent behavior.</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">six</span>
+<span class="n">output_key</span><span class="o">=</span><span class="s1">&#39;observations&#39;</span>
+<span class="n">time_step</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">observation</span> <span class="o">=</span> <span class="n">time_step</span><span class="o">.</span><span class="n">observation</span>
+<span class="n">keys</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">(</span><span class="n">time_step</span><span class="o">.</span><span class="n">observation</span><span class="p">)</span>
+<span class="n">observation_arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">observation</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+<span class="n">flatten_observation</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">observation</span><span class="p">)([(</span><span class="n">output_key</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">observation_arrays</span><span class="p">))])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;flatten_observations:&#39;</span><span class="p">,</span> <span class="n">flatten_observation</span><span class="p">[</span><span class="s2">&quot;observations&quot;</span><span class="p">])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>flatten_observations: [-0.43414985  0.90084067  0.74237176  0.66998819 -0.5534474   0.83288413
+ -0.79495278  0.60667131  0.82495251  0.56520205  0.3423599   0.93956889
+  0.03322552  0.99944788  1.3         0.          0.          0.
+  0.          0.          0.          0.          0.          0.        ]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Still interested? Have then a look at ARS.py, run_ars_policy.py, and policies.py.</p>
+<p>What would be the easiest approach to produce an informed decision?</p>
+<p>Given this vector of 24 observations or 1x24 matrix, we need a 24x6 matrix in order to obtain a 1x6 vector of actions. And this exactly the definition of a linear policy. A simple parameter matrix that when multiplied by the vector of observations produces a vector of actions.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Lets create a function to flatten the observations now as we will use it going forward.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">flatten_observations</span><span class="p">(</span><span class="n">observation</span><span class="p">):</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">(</span><span class="n">time_step</span><span class="o">.</span><span class="n">observation</span><span class="p">)</span>
+    <span class="n">observation_arrays</span> <span class="o">=</span> <span class="p">[</span><span class="n">observation</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+    <span class="n">flatten_observation</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">observation</span><span class="p">)([(</span><span class="n">output_key</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">observation_arrays</span><span class="p">))])</span>
+    <span class="k">return</span> <span class="n">flatten_observation</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">predicted_actions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">flatten_observation</span><span class="p">[</span><span class="s2">&quot;observations&quot;</span><span class="p">],</span> <span class="n">weights</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;predicted_actions:&#39;</span><span class="p">,</span> <span class="n">predicted_actions</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>predicted_actions: [-2.80178807  1.93377489 -0.47818649  2.44143362  2.98622059 -6.00529312]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we only need to understand how to modify the initial weights in order to increase the rewards of the agent.</p>
+<p>Lets define a rollout function.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">rollouts</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_spec</span><span class="p">()</span>
+    <span class="n">time_step</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="n">ob</span> <span class="o">=</span> <span class="n">flatten_observations</span><span class="p">(</span><span class="n">time_step</span><span class="o">.</span><span class="n">observation</span><span class="p">)</span>
+    <span class="n">total_reward</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">ob</span><span class="p">[</span><span class="s2">&quot;observations&quot;</span><span class="p">],</span> <span class="n">weights</span><span class="p">)</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">minimum</span><span class="p">,</span><span class="n">spec</span><span class="o">.</span><span class="n">maximum</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">time_step</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="n">total_reward</span> <span class="o">+=</span> <span class="n">time_step</span><span class="o">.</span><span class="n">reward</span>
+    <span class="k">return</span> <span class="n">total_reward</span>
+    
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Test the rollouts function</span>
+<span class="n">rollouts</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="mi">24</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[17]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>38.187552360791976</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If we start with zero weights, we could shock these weights with noise. Lets try it out:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">w_star</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="mi">24</span><span class="p">)</span>
+<span class="n">v</span> <span class="o">=</span> <span class="mf">0.03</span> <span class="c1"># Variance </span>
+<span class="n">delta</span> <span class="o">=</span> <span class="n">v</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="mi">24</span><span class="p">)</span>
+
+<span class="n">w_test_up</span> <span class="o">=</span> <span class="n">w_star</span> <span class="o">+</span> <span class="n">delta</span>
+<span class="n">w_test_down</span> <span class="o">=</span> <span class="n">w_star</span> <span class="o">-</span> <span class="n">delta</span>
+
+<span class="n">rewards_up</span> <span class="o">=</span> <span class="n">rollouts</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">w_test_up</span><span class="p">)</span>
+<span class="n">rewards_down</span> <span class="o">=</span> <span class="n">rollouts</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">w_test_down</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rewards with a positive shock: &quot;</span><span class="p">,</span> <span class="n">rewards_up</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rewards with a negative shock: &quot;</span><span class="p">,</span> <span class="n">rewards_down</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Rewards with a positive shock:  29.421268597033784
+Rewards with a negative shock:  31.764229222161347
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The parameters of linear policy can be estimated using a simple update step:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">w_star</span> <span class="o">=</span> <span class="n">w_star</span> <span class="o">+</span> <span class="n">learning_rate</span><span class="o">*</span><span class="p">(</span><span class="n">rewards_up</span> <span class="o">-</span> <span class="n">rewards_down</span><span class="p">)</span><span class="o">*</span><span class="n">delta</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Unfortunately, we face several challenges. First, we need to find a way to run many rollouts, for both shocks and for many deltas.  Moreover, we need to find a way to summarize the results of these multiple rollouts. Nonetheless, lets try a single-core implementation below.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">calculate_rollouts</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">num_rollouts</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">reward</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rollouts</span><span class="p">):</span>
+        <span class="n">reward</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rollouts</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">weights</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span><span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-8</span><span class="p">)</span> <span class="c1"># Play it safe</span>
+
+<span class="k">def</span> <span class="nf">obtain_new_weights</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">num_rollouts</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">num_deltas</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">final_weights</span> <span class="o">=</span> <span class="n">weights</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_deltas</span><span class="p">):</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">v</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="mi">24</span><span class="p">)</span>
+        <span class="n">w_test_up</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">+</span> <span class="n">delta</span>
+        <span class="n">w_test_down</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">-</span> <span class="n">delta</span>
+        <span class="n">rewards_up</span> <span class="o">=</span> <span class="n">calculate_rollouts</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">w_test_up</span><span class="p">,</span> <span class="n">num_rollouts</span><span class="p">)</span>
+        <span class="n">rewards_down</span> <span class="o">=</span> <span class="n">calculate_rollouts</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">w_test_down</span><span class="p">,</span> <span class="n">num_rollouts</span><span class="p">)</span>
+        <span class="n">final_weights</span><span class="o">+=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">num_deltas</span><span class="p">)</span><span class="o">*</span><span class="n">learning_rate</span><span class="o">*</span><span class="p">(</span><span class="n">rewards_up</span> <span class="o">-</span> <span class="n">rewards_down</span><span class="p">)</span><span class="o">*</span><span class="n">delta</span>
+    <span class="k">return</span> <span class="n">final_weights</span>
+
+<span class="c1"># Run the algorirthm for a few seconds...</span>
+<span class="n">new_weights</span> <span class="o">=</span> <span class="n">w_star</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">new_weights</span> <span class="o">=</span> <span class="n">obtain_new_weights</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">new_weights</span><span class="p">,</span> <span class="n">num_rollouts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">num_deltas</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Iteration </span><span class="si">%d</span><span class="s2">: Reward </span><span class="si">%d</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">rollouts</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">new_weights</span><span class="p">)</span> <span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Iteration 1: Reward 30.
+Iteration 2: Reward 39.
+Iteration 3: Reward 31.
+Iteration 4: Reward 30.
+Iteration 5: Reward 49.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Clearly, the code above is not efficient. And this is where Ray and RLlib help.</p>
+<p>Interested in seeing how the linear policy behaves after 8h of training, try:</p>
+<p>python code/run_ars_policy.py --policy_type="mlp"</p>
+<p>and a gif will be create to visualize the behavior of the trained neural network agent. The gif will be create in trained_policies/walker-walk/mlp folder.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you want to train your own agent for another domain/task, for example humanoid-run, you just need to type:</p>
+<p>python code/ars.py --policy_type="mlp" --domain_name="humanoid" --task_name="run"</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The linear policy after approximately 8h of training can reach levels of 500 in the walker-walk domain. Below please find an example of the linear agent.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">HTML</span><span class="p">(</span><span class="s1">&#39;&lt;img src=&quot;img/linear-walker-walk.gif&quot;&gt;&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[39]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<img src="img/linear-walker-walk.gif">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>Several policies have been implemented, and many more are in my to-do list. As of today, the MLP policy with layer normalization is performing quite well in the walker-walk optimization problem, reaching levels of 700.</p>
 
 </div>
@@ -21111,7 +21482,9 @@ wCn3//0zIPfLgS84uR8Hfs5tvwv4LHAa+AMgdNsr7vNp9/1dU75WvgP48CzJPOh/ntE4xxxzdGHa
 
 
 <div class="output_area">
+
 <div class="prompt output_prompt">Out[104]:</div>
+
 
 
 <div class="output_html rendered_html output_subarea output_execute_result">
@@ -21124,18 +21497,14 @@ wCn3//0zIPfLgS84uR8Hfs5tvwv4LHAa+AMgdNsr7vNp9/1dU75WvgP48CzJPOh/ntE4xxxzdGHa
 </div>
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Still interested? Have then a look at ARS.py, run_ars_policy.py, and policies.py. These files leverage Ray and RLib to estimate many type of policies leveraging all the available computing power.</p>
 
 </div>
 </div>
-</div>
-
 </div>
     </div>
   </div>

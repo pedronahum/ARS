@@ -352,7 +352,15 @@ class ARSLearner(object):
         rollout_rewards = rollout_rewards[idx,:]
         
         # normalize rewards by their standard deviation
-        rollout_rewards /= (np.std(rollout_rewards) + 1e-8)
+
+        if self.policy_params['normalization_type'] == 'normal':
+            rollout_rewards /= (np.std(rollout_rewards) + 1e-8)
+        elif self.policy_params['normalization_type'] == 'iqr':
+            rollout_rewards /= (np.percentile(rollout_rewards, 75) - np.percentile(rollout_rewards, 25) + 1e-8)
+        elif self.policy_params['normalization_type'] == 'none':
+            rollout_rewards = rollout_rewards
+        else:
+            rollout_rewards = rollout_rewards
 
         t1 = time.time()
         # aggregate rollouts to form g_hat, the gradient used to compute SGD step
@@ -485,7 +493,8 @@ def run_ars(params):
                    'hid_size': params['hid_size'],
                    'activation': params['activation'],
                    'ensemble_size': params['ensemble_size'],
-                   'degree': params['degree']}
+                   'degree': params['degree'],
+                   'normalization_type': params['normalization_type']}
 
     ARS = ARSLearner(domain_name=params['domain_name'],
                      task_name=params['task_name'],
@@ -518,6 +527,7 @@ if __name__ == '__main__':
     parser.add_argument('--delta_std', '-std', type=float, default=0.03)
     parser.add_argument('--n_workers', '-e', type=int, default=10)
     parser.add_argument('--rollout_length', '-r', type=int, default=100)
+    parser.add_argument('--normalization_type', type=str, default='iqr')
 
     # for Swimmer-v1 and HalfCheetah-v1 use shift = 0
     # for Hopper-v1, Walker2d-v1, and Ant-v1 use shift = 1

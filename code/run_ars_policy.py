@@ -195,7 +195,7 @@ def main():
     # Save gif
     clip = ImageSequenceClip(observation_matrix, fps=50)
     clip_name = "./trained_policies/" + args.domain_name + "-" + args.task_name + "/" \
-                + args.policy_type + "/" + "run.gif"
+                + args.policy_type + "/" + "linear-walker-walk.gif"
     clip.write_gif(clip_name)
 
 
